@@ -4,3 +4,5 @@ venv/
 .github/instructions/codacy.instructions.md
 .codacy/
 .github/
+__pycache__/
+*.pyc
