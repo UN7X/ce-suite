@@ -705,6 +705,10 @@ def main():
 
     args = parser.parse_args()
     
+    # Validate --json flag usage
+    if args.json and not args.list:
+        parser.error("--json flag can only be used with --list")
+    
     # Handle --list action
     if args.list:
         list_ciphers(json_output=args.json)
