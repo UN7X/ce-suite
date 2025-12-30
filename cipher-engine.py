@@ -44,6 +44,12 @@ class CipherStrategy(ABC):
         """Short description for help text."""
         pass
 
+    @property
+    @abstractmethod
+    def symbol(self) -> str:
+        """SF Symbol name for iOS GUI display."""
+        pass
+
     @abstractmethod
     def encode(self, text: str) -> str:
         pass
@@ -293,6 +299,7 @@ def load_plugins(plugin_dir: str = None) -> List[str]:
 class ZigZagCipher(CipherStrategy):
     name = "zigzag" 
     description = "Legacy Tally-based Zig-Zag (A=1 dot, Z=26 dots). Variable height."
+    symbol = "arrow.zigzag"
 
     # Braille bitmasks (1-6 standard)
     DOTS = {1: 0x01, 2: 0x02, 3: 0x04, 4: 0x08, 5: 0x10, 6: 0x20}
@@ -379,6 +386,7 @@ class ZigZagCipher(CipherStrategy):
 class Int2Cipher(CipherStrategy):
     name = "int2"
     description = "Scrambles bits into a linear Zig-Zag of 8-dot Braille (Efficient). Supports ECC."
+    symbol = "waveform.path.ecg"
 
     BASE = 0x2800
     DOTS = {1: 0x01, 2: 0x02, 3: 0x04, 4: 0x08, 5: 0x10, 6: 0x20, 7: 0x40, 8: 0x80}
@@ -458,6 +466,7 @@ class Int2Cipher(CipherStrategy):
 class IntegerCipher(CipherStrategy):
     name = "integer"
     description = "Encodes text as a single massive integer in Base-10 Braille."
+    symbol = "number.square"
     
     DIGITS = " ⠏⠋⠦⠇⠼⠙⠴⠹⠧"
 
@@ -497,6 +506,7 @@ class IntegerCipher(CipherStrategy):
 class SquareSpiralCipher(CipherStrategy):
     name = "square"
     description = "Packs data into a perfect N x N Braille square using a spiral fill. Supports ECC."
+    symbol = "square.grid.2x2"
 
     BASE = 0x2800
 
@@ -625,7 +635,8 @@ def list_ciphers(as_json: bool = False):
                 desc += " Does not support ECC."
             output[f"cipher{i}"] = {
                 "method": name,
-                "description": desc
+                "description": desc,
+                "symbol": cipher.symbol if hasattr(cipher, 'symbol') else "questionmark.circle"
             }
         print(json.dumps(output, indent=2))
     else:

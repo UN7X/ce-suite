@@ -30,6 +30,7 @@ class Rot13Cipher(CipherStrategy):
     
     name = "rot13"
     description = "Simple ROT13 letter substitution cipher (example plugin)."
+    symbol = "arrow.trianglehead.2.clockwise.rotate.90"
     
     def _rot13(self, text: str) -> str:
         """Apply ROT13 transformation to text."""
