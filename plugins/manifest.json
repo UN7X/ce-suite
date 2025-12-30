@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    {
+      "file": "rot13.py",
+      "cipher": "rot13",
+      "description": "Example ROT13 cipher plugin"
+    }
+  ]
+}
