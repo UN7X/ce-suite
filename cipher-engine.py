@@ -664,7 +664,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter
     )
     
-    parser.add_argument("--version", action="version", version="%(prog)s 4.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 5.0")
 
     method_help = "\n".join(f"  {k:<12}: {v.description}" for k, v in CIPHER_REGISTRY.items())
     
