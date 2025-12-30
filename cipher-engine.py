@@ -611,15 +611,32 @@ class SquareSpiralCipher(CipherStrategy):
 #  CLI LOGIC
 # ==========================================
 
-def list_ciphers():
+def list_ciphers(json_output=False):
     """Print all available ciphers and exit."""
-    print("\nAvailable Ciphers:")
-    print("=" * 60)
-    for name, cipher in CIPHER_REGISTRY.items():
-        ecc_support = "✓ ECC" if hasattr(cipher, 'ecc_symbols') else "  ---"
-        print(f"  {name:<12} [{ecc_support}]  {cipher.description}")
-    print("=" * 60)
-    print(f"\nTotal: {len(CIPHER_REGISTRY)} cipher(s) registered.")
+    if json_output:
+        # JSON output format
+        ciphers_data = []
+        for name, cipher in CIPHER_REGISTRY.items():
+            ecc_support = hasattr(cipher, 'ecc_symbols')
+            ciphers_data.append({
+                "name": name,
+                "description": cipher.description,
+                "ecc_support": ecc_support
+            })
+        output = {
+            "ciphers": ciphers_data,
+            "total": len(CIPHER_REGISTRY)
+        }
+        print(json.dumps(output, indent=2))
+    else:
+        # Regular text output format
+        print("\nAvailable Ciphers:")
+        print("=" * 60)
+        for name, cipher in CIPHER_REGISTRY.items():
+            ecc_support = "✓ ECC" if hasattr(cipher, 'ecc_symbols') else "  ---"
+            print(f"  {name:<12} [{ecc_support}]  {cipher.description}")
+        print("=" * 60)
+        print(f"\nTotal: {len(CIPHER_REGISTRY)} cipher(s) registered.")
 
 
 def main():
@@ -662,6 +679,9 @@ def main():
     action_group.add_argument("-d", "--decode", action="store_true", help="Decode mode")
     action_group.add_argument("-l", "--list", action="store_true", help="List all available ciphers")
     
+    # Output format options
+    parser.add_argument("--json", action="store_true", help="Output results in JSON format (used with --list)")
+    
     # ECC options
     parser.add_argument("--ecc-symbols", type=int, default=DEFAULT_ECC_SYMBOLS, metavar="N",
                         help=f"Reed-Solomon ECC symbols (default: {DEFAULT_ECC_SYMBOLS}). Higher = more error correction.")
@@ -685,9 +705,13 @@ def main():
 
     args = parser.parse_args()
     
+    # Validate --json flag usage
+    if args.json and not args.list:
+        parser.error("--json flag can only be used with --list")
+    
     # Handle --list action
     if args.list:
-        list_ciphers()
+        list_ciphers(json_output=args.json)
         sys.exit(0)
     
     # Resolve ECC symbols (--no-ecc takes precedence)
