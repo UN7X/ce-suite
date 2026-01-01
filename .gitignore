@@ -4,3 +4,4 @@ venv/
 .github/instructions/codacy.instructions.md
 .codacy/
 .github/
+plugins/__pycache__/

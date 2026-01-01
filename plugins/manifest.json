@@ -4,6 +4,11 @@
       "file": "rot13.py",
       "cipher": "rot13",
       "description": "Example ROT13 cipher plugin"
+    },
+    {
+      "file": "braille.py",
+      "cipher": "braille",
+      "description": "Encodes text as Unicode Braille dot patterns"
     }
   ]
 }
